@@ -1,0 +1,19 @@
+version: 3
+
+services:
+  api:
+    dockerfile: api/Dockerfile
+    container_name: aquarium-api
+    depends_on:
+      - database
+
+  graph:
+    dockerfile: graph/Dockerfile
+    container_name: aquarium-graph
+    depends_on:
+      - api
+      - database
+
+  database:
+    dockerfile: database/Dockerfile
+    container_name: aquarium-database

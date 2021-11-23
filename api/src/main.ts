@@ -1,6 +1,6 @@
 import express from 'express';
 import helmet from 'helmet';
-import aquariumRoutes from './aquarium-controller';
+import { aquariumRoutes } from './aquariums/aquarium-controller';
 
 const app = express();
 const port = 5000;
