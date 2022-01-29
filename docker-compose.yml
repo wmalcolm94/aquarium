@@ -1,19 +1,39 @@
-version: 3
-
+version: "3.9"
 services:
   api:
-    dockerfile: api/Dockerfile
-    container_name: aquarium-api
+    build:
+      context: api
+      dockerfile: Dockerfile
+    container_name: aquariumapi
+    ports:
+      - 7289:7289
     depends_on:
       - database
 
   graph:
-    dockerfile: graph/Dockerfile
-    container_name: aquarium-graph
+    build:
+      context: graphql
+      dockerfile: Dockerfile
+    container_name: aquariumgraph
+    ports:
+      - 4000:4000
     depends_on:
       - api
       - database
 
   database:
-    dockerfile: database/Dockerfile
-    container_name: aquarium-database
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator
+    container_name: aquariumcosmosdb
+    environment:
+       - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=5 
+       - AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE=true
+    ports:
+       - 8081:8081 
+       - 10251:10251 
+       - 10252:10252 
+       - 10253:10253 
+       - 10254:10254
+
+networks:
+  aquarium:
+    driver: bridge

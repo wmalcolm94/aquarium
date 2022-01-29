@@ -1,10 +1,7 @@
-FROM node:16 AS build
-COPY . /app
-WORKDIR /app
+FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
 
-RUN npm ci --only=production
-
-FROM gcr.io/distroless/nodejs:16
-COPY --from=build /app /app
 WORKDIR /app
-CMD ["./bin/main.js"]
+COPY . .
+RUN dotnet build 
+EXPOSE 7289
+CMD ['dotnet', 'run']
