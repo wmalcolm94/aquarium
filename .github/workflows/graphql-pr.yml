@@ -1,0 +1,30 @@
+name: Aquarium GraphQL API Pull Request Build
+
+on:
+  push:
+    paths:
+      - 'graphql/*'
+
+jobs:
+  build:
+    name: Aquarium GraphQL API Pull Request Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+      
+      # Installs Node.js on the github runner.
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      # Run's the test suite to help ensure proper functionality
+      - name: Run Test Suite
+        run: |
+          npm ci
+          npm run build
+          npm run test

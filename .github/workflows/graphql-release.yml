@@ -1,0 +1,86 @@
+name: Aquarium GraphQL API Integration Build
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'graphql/*'
+
+jobs:
+  build:
+    name: Aquarium GraphQL API Integration Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+      
+      # Installs Node.js on the github runner.
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      # Run's the test suite to help ensure proper functionality
+      - name: Run Test Suite
+        run: |
+          npm ci
+          npm run build
+          npm run test
+
+  release:
+    name: Create and Publish Aquarium GraphQL API Release
+    runs-on: ubuntu-latest
+    steps:
+      # Checks out the repo
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      # Installs the git version tool 
+      - name: Install GitVersion Tool
+        uses: gittools/actions/gitversion/setup@v0.9.11
+        with:
+          versionSpec: '5.8.1'
+
+      - name: Calculate Semantic Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.11
+
+      - name: Login to Docker
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Login to GHCR
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: ./graphql
+          push: true
+          tags: wmalcolm94/aquarium-graph:${{ steps.gitversion.outputs.semVer }}, wmalcolm94/aquarium-graph:${{ steps.gitversion.outputs.sha }}
+
+      # Creates a release with the changes in github
+      - name: Aquarium Graph API Release
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: '${{ steps.gitversion.outputs.semVer }}',
+              name: 'Graph API ${{ steps.gitversion.outputs.semVer }}',
+              generate_release_notes: true
+            });
