@@ -4,35 +4,38 @@ services:
     build:
       context: api
       dockerfile: Dockerfile
-    container_name: aquariumapi
+    container_name: aquarium-api
+    networks:
+      - aquarium
     ports:
-      - 7289:7289
+      - 8000:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       - database
+
+  database:
+    build:
+      context: database
+      dockerfile: Dockerfile
+    container_name: aquarium-database
+    networks:
+      - aquarium
+    ports:
+      - 1433:1433
 
   graph:
     build:
       context: graphql
       dockerfile: Dockerfile
-    container_name: aquariumgraph
+    container_name: aquarium-graph
+    networks:
+      - aquarium
     ports:
       - 4000:4000
     depends_on:
       - api
       - database
-
-  database:
-    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator
-    container_name: aquariumcosmosdb
-    environment:
-       - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=5 
-       - AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE=true
-    ports:
-       - 8081:8081 
-       - 10251:10251 
-       - 10252:10252 
-       - 10253:10253 
-       - 10254:10254
 
 networks:
   aquarium:

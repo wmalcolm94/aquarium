@@ -3,7 +3,7 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration["ConnectionString"] ?? "Server=localhost;Database=AquariumDatabase;User Id=sa;Password=f+r=H+by123;";
+var connectionString = builder.Configuration["ConnectionString"] ?? "Server=database;Database=AquariumDatabase;User Id=sa;Password=f+r=H+by123;";
 if (string.IsNullOrEmpty(connectionString))
 {
     throw new ArgumentNullException("ConnectionString", "Must provide a connection string for the sql database");
@@ -32,8 +32,6 @@ if (app.Environment.IsDevelopment())
         options.RoutePrefix = string.Empty;
     });
 }
-
-app.UseHttpsRedirection();
 
 app.MapGet("/aquariums", async (AquariumDb db) => await db.Aquariums.ToListAsync());
 

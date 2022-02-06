@@ -29,9 +29,9 @@ const aquarium = gql`
   }
 
   type Mutation {
-    create(aquarium: AquariumInput!): AquariumMutationResponse!
+    create(input: AquariumInput!): AquariumMutationResponse!
     delete(id: ID!): MutationResponse!
-    update(aquarium: AquariumInput!): AquariumMutationResponse!
+    update(input: AquariumInput!): AquariumMutationResponse!
   }
 `;
 

@@ -11,20 +11,20 @@ const resolverMap = {
         },
     },
     Mutation: {
-      create: async (_parent: any, { createAquarium }: any, context: { dataSources: IDataSources }) => {
+      create: async (_parent: any, { createAquarium: input }: any, context: { dataSources: IDataSources }) => {
         const aquarium: AquariumInput = {
-          description: createAquarium.description,
-          size: createAquarium.size
+          description: input.description,
+          size: input.size
         };
         return await context.dataSources.aquariumService.createAquarium(aquarium);
       },
       delete: async (_parent: any, { id }: any, context: { dataSources: IDataSources }) => {
         return await context.dataSources.aquariumService.deleteAquarium(id);
       },
-      update: async (_parent: any, { id, updateAquarium }: any, context: { dataSources: IDataSources }) => {
+      update: async (_parent: any, { id, input }: any, context: { dataSources: IDataSources }) => {
         const aquarium: AquariumInput = {
-          description: updateAquarium.description,
-          size: updateAquarium.size
+          description: input.description,
+          size: input.size
         };
         return await context.dataSources.aquariumService.updateAquarium(id, aquarium);
       }
