@@ -1,24 +1,20 @@
-import 'graphql-import-node';
+import 'reflect-metadata';
 import { IncomingHttpHeaders } from 'http';
 import { ApolloServer } from 'apollo-server';
-import typeDefs from './schema/definition/aquarium';
-import resolvers from './schema/resolvers/aquarium';
-import getDataSources from './datasource';
+import { buildSchema } from 'type-graphql';
+import { AquariumResolver } from './schema/aquarium';
 
 interface Context {
   HttpHeaders: IncomingHttpHeaders;
+} 
+async function bootstrap() {
+  const schema = await buildSchema({ 
+    resolvers: [AquariumResolver]
+  });
+
+  const apollo = new ApolloServer({ schema });
+
+  apollo.listen(4000, () => console.log('Server started on port 4000'));
 }
 
-const apollo = new ApolloServer({
-  typeDefs,
-  resolvers,
-  // context: async (request): Promise<Context> => {
-  //   console.log('Context', request);  
-  //   return {
-  //         HttpHeaders: request?.req?.headers
-  //   };
-  // },
-  dataSources: getDataSources
-});
-
-apollo.listen(4000, () => console.log('Server started on port 4000'));
+bootstrap();
