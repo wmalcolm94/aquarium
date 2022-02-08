@@ -46,6 +46,7 @@ export class AquariumResponse {
   public get success() {
     return this.messages.length > 0;
   }
+  public set success(value) {}
 
   @Field(type => Aquarium, { nullable: true })
   aquarium: Aquarium | undefined;
@@ -56,61 +57,26 @@ export class AquariumResolver {
 
   @Query(returns => [Aquarium])
   async aquariums(): Promise<Aquarium[]> {
-    try {
-      return await aquariumService.getAquariums();
-    } catch (err: any) {
-      console.error(err);
-      return [];
-    }
+    return await aquariumService.getAquariums();
   }
 
   @Query(returns => Aquarium)
   async aquarium(@Arg("id") id: number): Promise<Aquarium | undefined> {
-    try {
-      return aquariumService.getAquariumById(id);
-    } catch (err: any) {
-      console.error(err);
-      return undefined;
-    }
+    return await aquariumService.getAquariumById(id);
   }
 
   @Mutation(returns => AquariumResponse)
   async addAquarium(@Arg("input") input: AquariumInput) : Promise<AquariumResponse> {
-    try {
-      const aquarium = Object.assign(new Aquarium(), {
-        description: input.description,
-        size: input.size
-      });
-  
-      return await aquariumService.createAquarium(aquarium);
-    } catch (err: any) {
-      console.error(err);
-      return { messages: [err.message], success: false, aquarium: undefined };
-    }
+    return await aquariumService.createAquarium(input);
   }
 
   @Mutation(returns => AquariumResponse)
   async updateAquarium(@Arg("id") id: number, @Arg("input") input: AquariumInput) : Promise<AquariumResponse> {
-    try {
-      const aquarium = Object.assign(new Aquarium(), {
-        description: input.description,
-        size: input.size
-      });
-  
-      return await aquariumService.updateAquarium(id, aquarium);
-    } catch (err: any) {
-      console.error(err);
-      return { messages: [err.message], success: false, aquarium: undefined };
-    }
+    return await aquariumService.updateAquarium(id, input);
   }
 
   @Mutation(returns => AquariumResponse)
   async deleteAquarium(@Arg("id") id: number) : Promise<AquariumResponse> {
-    try {
-      return await aquariumService.deleteAquarium(id);
-    } catch (err: any) {
-      console.error(err);
-      return { messages: [err.message], success: false, aquarium: undefined };
-    }
+    return await aquariumService.deleteAquarium(id);
   }
 }
