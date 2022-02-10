@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graph-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: graph
+  template:
+    metadata:
+      labels:
+        app: graph
+    spec:
+      containers:
+        - name: aquarium-graph
+          image: wmalcolm94/aquarium-graph
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: graph-service
+spec:
+  selector:
+    app: graph
+  ports: 
+    - name: graph
+      protocol: TCP
+      port: 4000
+      targetPort: 4000

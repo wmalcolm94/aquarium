@@ -1,0 +1,24 @@
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: aquarium
+build:
+  artifacts:
+  - image: wmalcolm94/aquarium-api
+    context: api
+    docker:
+      dockerfile: Dockerfile
+  - image: wmalcolm94/aquarium-database
+    context: database
+    docker:
+      dockerfile: Dockerfile
+  - image: wmalcolm94/aquarium-graph
+    context: graphql
+    docker:
+      dockerfile: Dockerfile
+deploy:
+  kubectl:
+    manifests:
+    - api/api-deploy.yml
+    - database/database-deploy.yml
+    - graphql/graphql-deploy.yml
