@@ -14,10 +14,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@graphql-codegen/cli": "^2.5.0",
-    "@graphql-codegen/introspection": "^2.1.1",
-    "@graphql-codegen/typescript": "^2.4.3",
-    "@graphql-codegen/typescript-resolvers": "^2.5.0",
     "@tsconfig/recommended": "^1.0.1",
     "@types/jsonwebtoken": "^8.5.8",
     "apollo-server": "^3.6.2",

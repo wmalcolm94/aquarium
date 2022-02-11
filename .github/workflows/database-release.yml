@@ -22,7 +22,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6'
+          dotnet-version: '6.0.x'
 
       # Run's the test suite to help ensure proper functionality
       - name: Run Build
