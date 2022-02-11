@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'graphql/**'
-      - 'github/workflows/**'
+      - '.github/workflows/**'
 
 concurrency:
   group: graphql-ci
