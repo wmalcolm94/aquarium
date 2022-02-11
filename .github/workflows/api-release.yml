@@ -26,6 +26,7 @@ jobs:
 
       # Run's the test suite to help ensure proper functionality
       - name: Run Build
+        working-directory: api
         run: |
           dotnet build
 

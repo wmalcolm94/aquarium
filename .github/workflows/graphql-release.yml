@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'graphql/*'
+      - 'github/workflows/graphql-*.yml'
 
 jobs:
   build:
@@ -26,6 +27,7 @@ jobs:
 
       # Run's the test suite to help ensure proper functionality
       - name: Run Test Suite
+        working-directory: graphql
         run: |
           npm ci
           npm run build
