@@ -1,31 +1,60 @@
-import { RESTDataSource } from "apollo-datasource-rest";
+import axios from 'axios';
 import { apiUrl } from '../appsettings.json';
-import { Aquarium, AquariumInput, AquariumMutationResponse, MutationResponse } from '../schema/graphql';
+import { Aquarium, AquariumInput, AquariumResponse } from '../schema/aquarium';
 
-export class AquariumService extends RESTDataSource {
-
-  constructor() {
-    super();
-    this.baseURL = apiUrl;
+async function createAquarium(aquarium: AquariumInput): Promise<AquariumResponse> {
+  try {
+    const result = await axios.post(`${apiUrl}/aquariums`, aquarium);
+    return { success: true, messages: [], aquarium: await getAquariumById(result.data.id) };
+  } catch (err: any) {
+    console.log(err.message);
+    return { messages: [err.message], success: false, aquarium: undefined };
   }
+};
 
-  createAquarium(aquarium: AquariumInput): Promise<AquariumMutationResponse> {
-    return this.post(`/aquariums`, aquarium);
+async function deleteAquarium(id: number): Promise<AquariumResponse> {
+  try {
+    await axios.delete(`${apiUrl}/aquariums/${id}`);
+    return { success: true, messages: [], aquarium: undefined };
+  } catch (err: any) {
+    console.log(err.message);
+    return { messages: [err.message], success: false, aquarium: undefined };
   }
+};
 
-  deleteAquarium(id: string): Promise<MutationResponse> {
-    return this.delete(`/aquariums/${id}`);
+async function getAquariums(): Promise<Aquarium[]> {
+  try {
+    const result = await axios.get(`${apiUrl}/aquariums`);
+    return result.data as Aquarium[];
+  } catch (err: any) {
+    console.log(err.message);
+    return [];
   }
+};
 
-  getAquariums(): Promise<Aquarium[]> {
-    return this.get(`/aquariums`);
-  }
+async function getAquariumById(id: number): Promise<Aquarium | undefined> {
+  try {
+    const result = await axios.get(`${apiUrl}/aquariums/${id}`);
+    if (!result || result.data) {
+      return undefined;
+    }
 
-  getAquariumById(id: string): Promise<Aquarium> {
-    return this.get(`/aquariums/${id}`);
-  }
-
-  updateAquarium(id: string, aquarium: AquariumInput): Promise<AquariumMutationResponse> {
-    return this.put(`/aquariums/${id}`, aquarium);
+    return result.data as Aquarium;
+  } catch (err: any) {
+    console.log(err.message);
+    return undefined;
   }
 }
+
+async function updateAquarium(id: number, aquarium: AquariumInput): Promise<AquariumResponse> {
+  try {
+    const result = await axios.put(`${apiUrl}/aquariums/${id}`, aquarium);
+    console.log(result.data);
+    return { success: true, messages: [], aquarium: await getAquariumById(result.data.id) };
+  } catch (err: any) {
+    console.log(err.message);
+    return { messages: [err.message], success: false, aquarium: undefined };
+  }
+}
+
+export { createAquarium, deleteAquarium, getAquariumById, getAquariums, updateAquarium };

@@ -1,0 +1,30 @@
+name: Aquarium REST API Pull Request Build
+
+on:
+  push:
+    paths:
+      - 'api/*'
+      - 'github/workflows/api-*.yml'
+
+jobs:
+  build:
+    name: Aquarium REST API Pull Request Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+      
+      # Installs Node.js on the github runner.
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
+      # Run's the test suite to help ensure proper functionality
+      - name: Run Build
+        working-directory: api
+        run: |
+          dotnet build

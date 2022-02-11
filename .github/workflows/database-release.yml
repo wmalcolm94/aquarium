@@ -1,16 +1,16 @@
-name: Aquarium GraphQL API Integration Build
+name: Aquarium Database Integration Build
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'graphql/*'
-      - 'github/workflows/graphql-*.yml'
+      - 'database/*'
+      - 'github/workflows/database-*.yml'
 
 jobs:
   build:
-    name: Aquarium GraphQL API Integration Build
+    name: Aquarium Database Integration Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout branch
@@ -20,18 +20,16 @@ jobs:
           fetch-depth: 0
       
       # Installs Node.js on the github runner.
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
         with:
-          node-version: '16'
+          dotnet-version: '6.0.x'
 
       # Run's the test suite to help ensure proper functionality
-      - name: Run Test Suite
-        working-directory: graphql
+      - name: Run Build
+        working-directory: database
         run: |
-          npm ci
-          npm run build
-          npm run test
+          dotnet build
 
   release:
     name: Create and Publish Aquarium GraphQL API Release
@@ -70,12 +68,12 @@ jobs:
       # - name: Build and push
       #   uses: docker/build-push-action@v2
       #   with:
-      #     context: ./graphql
+      #     context: ./database
       #     push: true
-      #     tags: wmalcolm94/aquarium-graph:${{ steps.gitversion.outputs.semVer }}, wmalcolm94/aquarium-graph:${{ steps.gitversion.outputs.sha }}
+      #     tags: wmalcolm94/aquarium-database:${{ steps.gitversion.outputs.semVer }}, wmalcolm94/aquarium-database:${{ steps.gitversion.outputs.sha }}
 
       # Creates a release with the changes in github
-      - name: Aquarium Graph API Release
+      - name: Aquarium Database Release
         uses: actions/github-script@v5
         with:
           script: |
@@ -83,6 +81,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag_name: '${{ steps.gitversion.outputs.semVer }}',
-              name: 'Graph API ${{ steps.gitversion.outputs.semVer }}',
+              name: 'Database ${{ steps.gitversion.outputs.semVer }}',
               generate_release_notes: true
             });
