@@ -1,7 +1,9 @@
 name: Aquarium Database Pull Request Build
 
 on:
-  push:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
     paths:
       - 'database/*'
       - 'github/workflows/database-*.yml'

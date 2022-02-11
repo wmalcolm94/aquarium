@@ -1,7 +1,9 @@
 name: Aquarium GraphQL API Pull Request Build
 
 on:
-  push:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
     paths:
       - 'graphql/*'
       - 'github/workflows/graphql-*.yml'
@@ -29,4 +31,3 @@ jobs:
         run: |
           npm ci
           npm run build
-          npm run test
