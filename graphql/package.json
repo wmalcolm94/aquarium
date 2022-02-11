@@ -7,8 +7,7 @@
     "build": "tsc -b",
     "clean": "rimraf bin/",
     "start": "node bin/main",
-    "start:dev": "npm run clean && npm run build && npm run start",
-    "test": "tsc -p tests/tsconfig.spec.json && jest --config=tests/jest.config.js"
+    "start:dev": "npm run clean && npm run build && npm run start"
   },
   "keywords": [],
   "author": "",
