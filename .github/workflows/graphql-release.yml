@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'graphql/*'
-      - 'github/workflows/graphql-*.yml'
+      - 'graphql/**'
+      - 'github/workflows/**'
 
 concurrency:
   group: graphql-ci
@@ -19,8 +19,9 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.sha }}
           fetch-depth: 0
+          ssh-key: ${{ secrets.COMMIT_SSH_KEY }}
       
       # Installs Node.js on the github runner.
       - name: Setup Node.js
@@ -43,8 +44,9 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.sha }}
           fetch-depth: 0
+          ssh-key: ${{ secrets.COMMIT_SSH_KEY }}
 
       # Installs the git version tool 
       - name: Install GitVersion Tool

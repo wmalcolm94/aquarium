@@ -1,10 +1,12 @@
 name: Aquarium REST API Pull Request Build
 
 on:
-  push:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
     paths:
-      - 'api/*'
-      - 'github/workflows/api-*.yml'
+      - 'api/**'
+      - 'github/workflows/**'
 
 jobs:
   build:

@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'api/*'
-      - 'github/workflows/api-*.yml'
+      - 'api/**'
+      - 'github/workflows/**'
 
 jobs:
   build:
@@ -16,8 +16,9 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.sha }}
           fetch-depth: 0
+          ssh-key: ${{ secrets.COMMIT_SSH_KEY }}
       
       # Installs Node.js on the github runner.
       - name: Setup .NET
@@ -39,8 +40,9 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.sha }}
           fetch-depth: 0
+          ssh-key: ${{ secrets.COMMIT_SSH_KEY }}
 
       # Installs the git version tool 
       - name: Install GitVersion Tool
