@@ -8,6 +8,9 @@ on:
       - 'graphql/*'
       - 'github/workflows/graphql-*.yml'
 
+concurrency:
+  group: graphql-ci
+
 jobs:
   build:
     name: Aquarium GraphQL API Integration Build
@@ -53,7 +56,10 @@ jobs:
       - name: Calculate Semantic Version
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.11
-
+        with:
+          useConfigFile: true
+          configFilePath: ./graphql/Gitversion.yml
+          
       # - name: Login to Docker
       #   uses: docker/login-action@v1 
       #   with:
