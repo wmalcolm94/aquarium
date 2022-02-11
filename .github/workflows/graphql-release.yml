@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'graphql/*'
-      - 'github/workflows/graphql-*.yml'
+      - 'graphql/**'
+      - 'github/workflows/**'
 
 concurrency:
   group: graphql-ci

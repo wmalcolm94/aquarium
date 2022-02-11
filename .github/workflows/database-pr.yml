@@ -5,8 +5,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
-      - 'database/*'
-      - 'github/workflows/database-*.yml'
+      - 'database/**'
+      - 'github/workflows/**'
 
 jobs:
   build:

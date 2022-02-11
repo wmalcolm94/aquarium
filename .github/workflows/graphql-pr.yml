@@ -5,8 +5,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
-      - 'graphql/*'
-      - 'github/workflows/graphql-*.yml'
+      - 'graphql/**'
+      - 'github/workflows/**'
 
 jobs:
   build:

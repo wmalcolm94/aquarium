@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'database/*'
-      - 'github/workflows/database-*.yml'
+      - 'database/**'
+      - 'github/workflows/**'
 
 jobs:
   build:
